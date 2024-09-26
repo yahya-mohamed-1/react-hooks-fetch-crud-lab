@@ -19,7 +19,26 @@ function QuestionForm(props) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    console.log(formData);
+    const { prompt, answer1, answer2, answer3, answer4, correctIndex } = formData;
+    const answers = [answer1, answer2, answer3, answer4];
+    const requestBody = {
+      prompt,
+      answers,
+      correctIndex: parseInt(correctIndex, 10),
+    };
+  
+    fetch('http://localhost:4000/questions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestBody),
+    })
+    .then(response => response.json())
+    .then(data => {
+      // Update the state to display the new question in the QuestionList component
+      props.onAddQuestion(data);
+    })
   }
 
   return (
